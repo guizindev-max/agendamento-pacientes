@@ -16,5 +16,11 @@ namespace Agendamento.Services
         {
             return _context.Pacientes.OrderBy(paciente => paciente.Nome).ToList();
         }
+
+        public void Inserir(Paciente paciente)
+        {
+            _context.Pacientes.Add(paciente);
+            _context.SaveChanges();
+        }
     }
 }
