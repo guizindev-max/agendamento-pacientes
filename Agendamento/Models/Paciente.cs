@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Agendamento.Models.Validations;
 
 namespace Agendamento.Models
 {
@@ -15,11 +16,12 @@ namespace Agendamento.Models
         [Display(Name = "CPF")]
         [StringLength(11, MinimumLength = 11, ErrorMessage = "O CPF deve ter 11 dígitos, sem pontos ou traço.")]
         [RegularExpression(@"^[0-9]{11}$", ErrorMessage = "Digite apenas os 11 números do CPF.")]
+        [Cpf]
         public string Cpf { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Informe o telefone.")]
         [StringLength(11, MinimumLength = 10, ErrorMessage = "O telefone deve ter 10 ou 11 dígitos, incluindo o DDD.")]
-        [RegularExpression(@"^[0-9]{10,11}$", ErrorMessage = "Digite o DDD e o telefone, somente números.")]
+        [RegularExpression(@"^[1-9][0-9]{9,10}$", ErrorMessage = "Digite o DDD e o telefone, somente números, sem zero inicial.")]
         public string Telefone { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Informe o endereço.")]
@@ -31,6 +33,7 @@ namespace Agendamento.Models
         [Display(Name = "Data de nascimento")]
         [DataType(DataType.Date)]
         [Column(TypeName = "date")]
+        [DataNascimento]
         public DateTime? DataNascimento { get; set; }
     }
 }
