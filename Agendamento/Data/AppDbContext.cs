@@ -21,5 +21,7 @@ namespace Agendamento.Data
         // basta criar outro DbSet com a entidade correspondente.
         public DbSet<Medico> Medicos { get; set; }
 
+        public DbSet<Paciente> Pacientes { get; set; }
+
     }
 }
