@@ -56,6 +56,7 @@ As migrations já estão versionadas. `Add-Migration AdicionarPacientes` / `dotn
 | Arquivo ou pasta | Responsabilidade |
 | --- | --- |
 | `Models/Paciente.cs` | Propriedades, validações e mapeamento da data |
+| `Models/Validations/` | Atributos de validação de CPF e data de nascimento |
 | `Data/AppDbContext.cs` | Disponibiliza `DbSet<Paciente>` |
 | `Migrations/` | Histórico da estrutura do banco |
 | `Data/SeedingService.cs` | Dados iniciais de médicos e pacientes |
@@ -71,16 +72,20 @@ O fluxo segue as aulas: navegador → controller → service → contexto/EF Cor
 | Campo | Regra |
 | --- | --- |
 | Nome | Obrigatório, de 3 a 100 caracteres |
-| CPF | Obrigatório, exatamente 11 números, sem pontuação |
-| Telefone | Obrigatório, 10 ou 11 números, com DDD |
+| CPF | Obrigatório, exatamente 11 números, sem pontuação, com dígitos verificadores válidos |
+| Telefone | Obrigatório, 10 ou 11 números, com DDD sem zero inicial |
 | Endereço | Obrigatório, de 5 a 200 caracteres |
 | Data de nascimento | Obrigatória, de 01/01/1900 até hoje |
 
-CPF e telefone são textos para preservar zeros à esquerda. O CPF é validado pelo formato; este trabalho não calcula dígitos verificadores nem consulta a Receita Federal. Também não há regra de unicidade de CPF. Os valores do seeding são fictícios e servem apenas à demonstração.
+CPF e telefone são textos. O CPF preserva zeros à esquerda e é validado pelo formato e pelos dois dígitos verificadores; sequências com todos os dígitos iguais são rejeitadas. Não há consulta à Receita Federal nem regra de unicidade de CPF. Os valores do seeding são exemplos para demonstração, com verificadores calculados; não representam uma confirmação de identidade.
+
+Os atributos `CpfAttribute` e `DataNascimentoAttribute` centralizam essas regras no modelo. Os formulários verificam `ModelState.IsValid` antes de salvar. Fora do MVC, execute `Validator.ValidateObject` com `validateAllProperties: true`, pois `SaveChanges()` não executa as validações de Data Annotations.
 
 `DataNascimento` é `DateTime?` para representar o formulário vazio. `[Required]` impede gravar sem data e `[Column(TypeName = "date")]` mantém apenas a data no PostgreSQL. A migration gera a coluna como `NOT NULL`.
 
 O seeding verifica cada tabela com `Any()`. Reiniciar com dados existentes não os duplica. Se todos os pacientes forem removidos, a próxima inicialização em desenvolvimento recriará os três exemplos, conforme esse método ensinado em aula.
+
+A integração das validações não altera o esquema do banco nem exige outra migration. Registros existentes são preservados. Caso seu banco ainda tenha os CPFs antigos de exemplo (`00000000001`, `00000000002` e `00000000003`), corrija o CPF ao editar esses pacientes: a nova validação rejeita esses valores. O seeding atualizado vale para tabelas ainda vazias.
 
 ## Validação da implementação
 
