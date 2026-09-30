@@ -24,6 +24,8 @@ namespace Agendamento
 
             builder.Services.AddScoped<MedicoService>();
 
+            builder.Services.AddScoped<PacienteService>();
+
             var app = builder.Build();
 
             // Verifica se a aplicação não está sendo executada
