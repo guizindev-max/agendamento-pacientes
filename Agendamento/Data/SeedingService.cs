@@ -1,64 +1,72 @@
-﻿using Agendamento.Models;
+using Agendamento.Models;
 
 namespace Agendamento.Data
 {
     public class SeedingService
     {
-        // Declara uma referência para o contexto do banco de dados.
-        // O AppDbContext permite consultar, adicionar, atualizar e remover registros.
-        // O modificador readonly impede que essa referência seja substituída
-        // depois que o objeto SeedingService for construído.
         private readonly AppDbContext _context;
 
-        // O AppDbContext é recebido pelo construtor por meio da
-        // injeção de dependência (DI).
-        // O ASP.NET Core cria a instância configurada do AppDbContext
-        // e a fornece automaticamente quando cria o SeedingService.
         public SeedingService(AppDbContext context)
         {
-            // Armazena a instância recebida para que ela possa ser utilizada
-            // pelos outros métodos da classe.
             _context = context;
         }
 
-        // Popula o banco de dados com os registros iniciais.
         public void Popula()
         {
-            // Utiliza o contexto para consultar a tabela Medicos.
-            // Any() retorna true quando a tabela já possui pelo menos um registro.
-            if (_context.Medicos.Any())
+            // Cada tabela é verificada separadamente.
+            if (!_context.Medicos.Any())
             {
-                // Encerra o método para evitar a inserção de dados duplicados.
-                return;
-
-            }
-            else
-            {
-                // Cria o primeiro objeto que será inserido no banco.
-                Medico m1 = new Medico
+                Medico medico1 = new Medico
                 {
                     Nome = "Luiza",
                     Crm = "123456",
                     Especialidade = "Vascular"
                 };
 
-                // Cria o segundo objeto que será inserido no banco.
-                Medico m2 = new Medico
+                Medico medico2 = new Medico
                 {
                     Nome = "João",
                     Crm = "456789",
                     Especialidade = "Ortopedista"
                 };
 
-                // Adiciona os dois médicos ao contexto de uma única vez.
-                // Mas ainda não salva no banco de dados
-                _context.Medicos.AddRange(m1, m2);
-
-                // Confirma as alterações pendentes.
-                // O EF Core gera e executa os comandos INSERT no banco de dados.
-                _context.SaveChanges();
-
+                _context.Medicos.AddRange(medico1, medico2);
             }
+
+            if (!_context.Pacientes.Any())
+            {
+                // Dados fictícios para demonstrar as telas do trabalho.
+                Paciente paciente1 = new Paciente
+                {
+                    Nome = "Ana Exemplo",
+                    Cpf = "00000000001",
+                    Telefone = "11900000001",
+                    Endereco = "Rua de Exemplo, 100",
+                    DataNascimento = new DateTime(1995, 5, 12)
+                };
+
+                Paciente paciente2 = new Paciente
+                {
+                    Nome = "Carlos Exemplo",
+                    Cpf = "00000000002",
+                    Telefone = "11900000002",
+                    Endereco = "Rua de Exemplo, 200",
+                    DataNascimento = new DateTime(1988, 10, 3)
+                };
+
+                Paciente paciente3 = new Paciente
+                {
+                    Nome = "Marina Exemplo",
+                    Cpf = "00000000003",
+                    Telefone = "11900000003",
+                    Endereco = "Rua de Exemplo, 300",
+                    DataNascimento = new DateTime(2001, 2, 20)
+                };
+
+                _context.Pacientes.AddRange(paciente1, paciente2, paciente3);
+            }
+
+            _context.SaveChanges();
         }
     }
 }
