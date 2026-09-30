@@ -22,5 +22,29 @@ namespace Agendamento.Services
             _context.Pacientes.Add(paciente);
             _context.SaveChanges();
         }
+
+        public Paciente? BuscarPorId(int id)
+        {
+            return _context.Pacientes.Find(id);
+        }
+
+        public bool Editar(Paciente paciente)
+        {
+            var pacienteBanco = BuscarPorId(paciente.Id);
+
+            if (pacienteBanco == null)
+            {
+                return false;
+            }
+
+            pacienteBanco.Nome = paciente.Nome;
+            pacienteBanco.Cpf = paciente.Cpf;
+            pacienteBanco.Telefone = paciente.Telefone;
+            pacienteBanco.Endereco = paciente.Endereco;
+            pacienteBanco.DataNascimento = paciente.DataNascimento;
+
+            _context.SaveChanges();
+            return true;
+        }
     }
 }
