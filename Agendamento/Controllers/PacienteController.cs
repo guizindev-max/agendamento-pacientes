@@ -83,6 +83,31 @@ namespace Agendamento.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
+        public IActionResult Remover(int id)
+        {
+            var paciente = _pacienteService.BuscarPorId(id);
+
+            if (paciente == null)
+            {
+                return NotFound();
+            }
+
+            return View(paciente);
+        }
+
+        [HttpPost, ActionName("Remover")]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemoverConfirmado([FromRoute] int id)
+        {
+            if (!_pacienteService.Remover(id))
+            {
+                return NotFound();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
         private void ValidarDataNascimento(Paciente paciente)
         {
             if (paciente.DataNascimento.HasValue &&

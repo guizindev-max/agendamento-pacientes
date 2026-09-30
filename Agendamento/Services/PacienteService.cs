@@ -46,5 +46,19 @@ namespace Agendamento.Services
             _context.SaveChanges();
             return true;
         }
+
+        public bool Remover(int id)
+        {
+            var paciente = BuscarPorId(id);
+
+            if (paciente == null)
+            {
+                return false;
+            }
+
+            _context.Pacientes.Remove(paciente);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

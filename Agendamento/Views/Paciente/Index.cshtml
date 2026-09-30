@@ -39,6 +39,7 @@ else
                         <td>@paciente.DataNascimento?.ToString("dd/MM/yyyy")</td>
                         <td class="text-nowrap">
                             <a asp-action="Editar" asp-route-id="@paciente.Id" class="btn btn-primary btn-sm">Editar</a>
+                            <a asp-action="Remover" asp-route-id="@paciente.Id" class="btn btn-danger btn-sm">Remover</a>
                         </td>
                     </tr>
                 }
