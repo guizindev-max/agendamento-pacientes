@@ -1,0 +1,55 @@
+@model Agendamento.Models.Paciente
+
+@{
+    ViewData["Title"] = "Inserir paciente";
+}
+
+<h1>Inserir paciente</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Inserir" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Nome" class="form-label"></label>
+                <input asp-for="Nome" class="form-control" maxlength="100" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Cpf" class="form-label"></label>
+                <input asp-for="Cpf" class="form-control" maxlength="11" inputmode="numeric" aria-describedby="cpf-ajuda" />
+                <div id="cpf-ajuda" class="form-text">Informe 11 números, sem pontos ou traço.</div>
+                <span asp-validation-for="Cpf" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Telefone" class="form-label"></label>
+                <input asp-for="Telefone" class="form-control" maxlength="11" inputmode="numeric" aria-describedby="telefone-ajuda" />
+                <div id="telefone-ajuda" class="form-text">Informe o DDD e o telefone, somente números.</div>
+                <span asp-validation-for="Telefone" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Endereco" class="form-label"></label>
+                <input asp-for="Endereco" class="form-control" maxlength="200" />
+                <span asp-validation-for="Endereco" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DataNascimento" class="form-label"></label>
+                <input asp-for="DataNascimento" class="form-control" min="1900-01-01" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="DataNascimento" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Inserir</button>
+            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
