@@ -29,8 +29,6 @@ namespace Agendamento.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Inserir([Bind("Nome,Cpf,Telefone,Endereco,DataNascimento")] Paciente paciente)
         {
-            ValidarDataNascimento(paciente);
-
             if (!ModelState.IsValid)
             {
                 return View(paciente);
@@ -67,8 +65,6 @@ namespace Agendamento.Controllers
             {
                 return NotFound();
             }
-
-            ValidarDataNascimento(paciente);
 
             if (!ModelState.IsValid)
             {
@@ -108,15 +104,5 @@ namespace Agendamento.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private void ValidarDataNascimento(Paciente paciente)
-        {
-            if (paciente.DataNascimento.HasValue &&
-                (paciente.DataNascimento.Value.Date > DateTime.Today ||
-                 paciente.DataNascimento.Value.Date < new DateTime(1900, 1, 1)))
-            {
-                ModelState.AddModelError(nameof(Paciente.DataNascimento),
-                    "A data de nascimento deve estar entre 01/01/1900 e hoje.");
-            }
-        }
     }
 }
